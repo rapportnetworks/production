@@ -36,6 +36,7 @@ metadata {
 
 	simulator {
 		// TODO: define status and reply messages here
+        // Test update
 	}
 
 	tiles (scale: 2) {
