@@ -17,7 +17,7 @@
 
 
 metadata {
-	definition (name: "Netatmo Healthly Home Coach Dvh", namespace: "rapportnetworks", author: "Brian Steere,cscheiene, bd") {
+	definition (name: "Netatmo Healthly Home Coach", namespace: "rapportnetworks", author: "Brian Steere,cscheiene, bd") {
 		capability "Relative Humidity Measurement"
 		capability "Temperature Measurement"
         capability "Sensor"
