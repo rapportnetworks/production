@@ -19,7 +19,7 @@ private getBuildRedirectUrl() { "${serverUrl}/oauth/initialize?appId=${app.id}&a
 
 // Automatically generated. Make future change here.
 definition(
-	name: "Netatmo Healthly Home Coach",
+	name: "Netatmo Healthly Home Coach App",
 	namespace: "rapportnetworks",
 	author: "Brian Steere,cscheiene, bdobrescu",
 	description: "Netatmo Integration",
