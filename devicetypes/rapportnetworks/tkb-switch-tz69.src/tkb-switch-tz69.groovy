@@ -12,7 +12,7 @@
  *
  */
 metadata {
-    definition (name: "Z-Wave Switch Secure TKB TZ69", namespace: "rapportnetworks", author: "AdamV") {
+    definition (name: "TKB Switch TZ69", namespace: "rapportnetworks", author: "AdamV") {
         capability "Switch"
         capability "Refresh"
         capability "Polling"
