@@ -344,7 +344,7 @@ def initialize() {
             switch(detail?.type) {
                 case 'NHC':
                     log.debug "My Health Coach Unit"
-                    createChildDevice("Netatmo Healthly Home Coach Dvh", deviceId, "${detail.type}.${deviceId}", detail.module_name)
+                    createChildDevice("Netatmo Healthy Home Coach Dvh", deviceId, "${detail.type}.${deviceId}", detail.module_name)
                     break
             }
         } catch (Exception e) {
@@ -411,7 +411,7 @@ def createChildDevice(deviceFile, dni, name, label) {
         def existingDevice = getChildDevice(dni)
         if(!existingDevice) {
             log.debug "Creating child"
-            def childDevice = addChildDevice("cscheiene", deviceFile, dni, null, [name: name, label: label, completedSetup: true])
+            def childDevice = addChildDevice("rapportnetworks", deviceFile, dni, null, [name: name, label: label, completedSetup: true])
         } else {
             log.debug "Device $dni already exists"
         }
