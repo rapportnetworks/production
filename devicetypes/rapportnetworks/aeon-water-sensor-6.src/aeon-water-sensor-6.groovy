@@ -1,5 +1,5 @@
 metadata {
-    definition (name: "Aeon Water Sensor 6", namespace: "robertvandervoort", author: "Robert Vandervoort", ocfDeviceType: "x.com.st.d.sensor.moisture") {
+    definition (name: "Aeon Water Sensor 6", namespace: "rapportnetworks", author: "Robert Vandervoort", ocfDeviceType: "x.com.st.d.sensor.moisture") {
         capability "Battery"
         capability "Power Source"
         capability "Configuration"
