@@ -63,7 +63,7 @@ metadata {
                 [value: 95, color: "#d04e00"],
                 [value: 96, color: "#bc2323"]
                 ]
-                )
+            )
         }
         valueTile("min_temp", "min_temp", width: 2, height: 1) {
             state "min_temp", label: 'Min: ${currentValue}°'
@@ -111,7 +111,6 @@ metadata {
 def parse(String description) {
     log.debug "Parsing '${description}'"
     // TODO: handle 'pressure' attribute
-
 }
 
 def poll() {

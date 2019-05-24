@@ -28,7 +28,7 @@ definition(
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Partner/netamo-icon-1%402x.png",
     oauth: true,
     singleInstance: true
-){
+) {
     appSetting "clientId"
     appSetting "clientSecret"
     appSetting "serverUrl"
@@ -89,7 +89,6 @@ def authPage() {
         def upgradeNeeded = """To use SmartThings Labs, your Hub should be completely up to date.
 
 To update your Hub, access Location Settings in the Main Menu (tap the gear next to your location name), select your Hub, and choose "Update Hub"."""
-
 
         return dynamicPage(name:"Credentials", title:"Upgrade needed!", nextPage:"", install:false, uninstall: true) {
             section {
@@ -318,13 +317,11 @@ String toQueryString(Map m) {
 
 def installed() {
     log.debug "Installed with settings: ${settings}"
-
     initialize()
 }
 
 def updated() {
     log.debug "Updated with settings: ${settings}"
-
     unsubscribe()
     unschedule()
     initialize()
@@ -365,18 +362,17 @@ def initialize() {
 
 def uninstalled() {
     log.debug "In uninstalled"
-
     removeChildDevices(getChildDevices())
 }
 
 def getDeviceList() {
     log.debug "Refreshing data"
-def deviceList = [:]
-def moduleName = null
-state.deviceDetail = [:]
-state.deviceState = [:]
-def response
-apiGet("/api/gethomecoachsdata",["get_favorites":true]) { resp ->
+    def deviceList = [:]
+    def moduleName = null
+    state.deviceDetail = [:]
+    state.deviceState = [:]
+    def response
+    apiGet("/api/gethomecoachsdata",["get_favorites":true]) { resp ->
         state.response = resp.data.body
         log.debug "response = $state.response"
         resp.data.body.devices.each { value ->
@@ -385,14 +381,12 @@ apiGet("/api/gethomecoachsdata",["get_favorites":true]) { resp ->
                 deviceList[key] = "${value.name}: ${value.module_name}"
                 state.deviceDetail[key] = value
                 state.deviceState[key] = value.dashboard_data
-                }
+            }
         }
     }
-log.debug "deviceState=$state.deviceState"
-return deviceList.sort() { it.value.toLowerCase() }
-
+    log.debug "deviceState=$state.deviceState"
+    return deviceList.sort() { it.value.toLowerCase() }
 }
-
 
 private removeChildDevices(delete) {
     log.debug "In removeChildDevices"
@@ -496,7 +490,6 @@ def poll() {
                 child?.sendEvent(name: 'min_temp', value: cToPref(data['min_temp']) as float, unit: getTemperatureScale())
                 child?.sendEvent(name: 'max_temp', value: cToPref(data['max_temp']) as float, unit: getTemperatureScale())
                 child?.sendEvent(name: 'units', value: settings.pressUnits)
-
                 child?.sendEvent(name: 'lastupdate', value: lastUpdated(data['time_utc']), unit: "")
                 log.debug "sent time ${lastUpdated(data['time_utc'])}"
                 break
@@ -547,7 +540,6 @@ def windToPref(Wind) {
 }
 
 def debugEvent(message, displayEvent) {
-
     def results = [
         name: "appdebug",
         descriptionText: message,
@@ -555,7 +547,6 @@ def debugEvent(message, displayEvent) {
     ]
     log.debug "Generating AppDebug Event: ${results}"
     sendEvent (results)
-
 }
 
 private Boolean canInstallLabs() {
