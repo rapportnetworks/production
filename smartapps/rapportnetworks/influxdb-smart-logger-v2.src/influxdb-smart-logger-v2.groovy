@@ -63,6 +63,8 @@ def mainPage() {
             input(name: 'logStatuses', title: 'Statuses', description: '', type: 'bool', defaultValue: false, required: false)
 
             input(name: 'logConfigs', title: 'Configurations', description: '', type: 'bool', defaultValue: false, required: false)
+
+            input(name: 'logPings', title: 'Hub Pings', description: '', type: 'bool', defaultValue: false, required: false)
         }
 
         section('Influx Database settings') {
@@ -185,14 +187,15 @@ def updated() { // runs when app settings are changed
     state.logLevelDB = (settings.logLevelDB) ? settings.logLevelDB.toInteger() : 1
 
     /**
-     * if all database logging options are off, then influx line protcol will still be assembled, but only shown in IDE
+     * if all database logging options are off, then influx line protocol will still be assembled, but only shown in IDE
      */
-    if (!settings.logEvents && !settings.logMetadata && !settings.logStatuses && !settings.logConfigs) {
+    if (!settings.logEvents && !settings.logMetadata && !settings.logStatuses && !settings.logConfigs && !settings.logPings) {
         state.logToDB     = false
         state.logEvents   = true
         state.logMetadata = true
         state.logStatuses = true
         state.logConfigs  = true
+        state.logPings    = true
     }
     else {
         state.logToDB     = true
@@ -200,6 +203,7 @@ def updated() { // runs when app settings are changed
         state.logMetadata = settings?.logMetadata ?: false
         state.logStatuses = settings?.logStatuses ?: false
         state.logConfigs  = settings?.logConfigs  ?: false
+        state.logPings    = settings?.logPings    ?: false
     }
 
     /**
@@ -324,6 +328,14 @@ def handleHubStatus(evt) {
     if (state.logEvents) {
         def measurementType = 'hub'
         def measurementName = 'hub'
+        influxLineProtocol(evt, measurementName, measurementType)
+    }
+}
+
+def handleHubPing(evt) {
+    if (state.logPings) {
+        def measurementType = 'hub'
+        def measurementName = 'ping'
         influxLineProtocol(evt, measurementName, measurementType)
     }
 }
@@ -1153,7 +1165,7 @@ def handleInfluxDBResponseRemote(response, passData) {
  *  Private Helper Functions:
  *****************************************************************************************************************/
 private manageSchedules() {
-    logger('manageSchedules: Schedulling polling methods', 'trace')
+    logger('manageSchedules: Scheduling polling methods', 'trace')
     pollingMethods().each {
         try {
             unschedule(it.key)
@@ -1211,6 +1223,11 @@ private manageSubscriptions() {
 
     logger("manageSubscriptions: Subscribing 'handleHubStatus' listener to 'Hub Status' events", 'info')
     subscribe(location.hubs[0], 'hubStatus', handleHubStatus)
+
+    if (state.logPings) {
+        logger("manageSubscriptions: Subscribing 'handleHubPing' listener to 'Hub Ping' events", 'info')
+        subscribe(location.hubs[0], 'ping', handleHubPing)
+    }
 }
 
 private logger(msg, level = 'debug') { // Wrapper method for all logging
@@ -1401,6 +1418,7 @@ private getAttributeDetail() { [
         mute                    : [type: 'enum', levels: [muted: -1, unmuted: 1]],
         numberOfButtons         : [type: 'number', decimalPlaces: 0, unit: ''],
         pH                      : [type: 'number', decimalPlaces: 1, unit: ''],
+        ping                    : [type: 'hub', levels: [ping: 1]],
         power                   : [type: 'number', decimalPlaces: 0, unit: 'W'],
         powerSource             : [type: 'enum', levels: [mains: -2, dc: -1, battery: 1, unknown: 5]],
         presence                : [type: 'enum', levels: ['not present': -1, present: 1]],
