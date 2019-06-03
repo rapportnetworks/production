@@ -736,10 +736,10 @@ def influxLineProtocol(items, measurementName, measurementType, bucket = 'events
     if (state.logToDB) {
         state.influxDBVersionsLocations.each {
             switch (it) {
-                case 'v1Local'  : "postToInfluxDB${it}"(data, retentionPolicy)
-                case 'v1Remote' : "postToInfluxDB${it}"(data, retentionPolicy, eventId)
-                case 'v2Local'  : "postToInfluxDB${it}"(data, bucket)
-                case 'v2Remote' : "postToInfluxDB${it}"(data, bucket, eventId)
+                case 'v1Local'  : postToInfluxDBv1Local(data, retentionPolicy); break
+                case 'v2Local'  : postToInfluxDBv2Local(data, bucket); break
+                case 'v1Remote' : postToInfluxDBv1Remote(data, retentionPolicy, eventId); break
+                case 'v2Remote' : postToInfluxDBv2Remote(data, bucket, eventId); break
             }
         }
     }
