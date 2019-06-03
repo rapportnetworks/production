@@ -170,7 +170,7 @@ def mainPage() {
                     type           : 'text',
                     capitalization : 'none',
                     autoCorrect    : false,
-                    required       : true
+                    required       : false
             )
 
             input(
@@ -237,7 +237,7 @@ def mainPage() {
                     type           : 'text',
                     capitalization : 'none',
                     autoCorrect    : false,
-                    required       : true
+                    required       : false
             )
 
             input(
