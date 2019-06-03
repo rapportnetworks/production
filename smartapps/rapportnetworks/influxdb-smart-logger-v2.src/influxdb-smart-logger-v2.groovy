@@ -51,7 +51,7 @@ preferences {
 
 def mainPage() {
     dynamicPage(name: 'mainPage', uninstall: true, install: true) {
-        section('Logging Levels') {
+        section('Logging Details') {
             input(
                     name: 'logLevelIDE',
                     title: 'IDE Logging Level',
