@@ -51,7 +51,7 @@ preferences {
 
 def mainPage() {
     dynamicPage(name: 'mainPage', uninstall: true, install: true) {
-        section('Logger Settings') {
+        section('Logging Levels') {
             input(
                     name: 'logLevelIDE',
                     title: 'IDE Logging Level',
@@ -75,14 +75,18 @@ def mainPage() {
             )
 
             input(
-                    name: 'paraLoggingDB',
-                    title: 'Measurements to Log',
+                    name: 'dwellingType',
+                    title: 'Type of Dwelling',
                     description: '',
-                    type: 'paragraph',
-                    element: 'paragraph', // TODO - check this is required
+                    type: 'enum',
+                    options: [Flat: 'Flat', House: 'House', Building: 'Building', Complex: 'Complex', Office: 'Office'],
+                    defaultValue: Flat,
+                    displayDuringSetup: true,
                     required: false
             )
+        }
 
+        section('Data to Log') {
             input(
                     name: 'logEvents',
                     title: 'Events',
@@ -402,8 +406,9 @@ def updated() { // runs when app settings are changed
         }
     }
 
+    state.dwellingType = (settings?.dwellingType) ?: 'House'
+
     logger('updated: Creating map of group Ids and group names', 'debug')
-    state.dwellingType = 'House'
     state.groupNames = [:]
     if (settings.bridgePref) {
         def groupId
