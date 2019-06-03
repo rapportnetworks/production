@@ -1,3 +1,5 @@
+import java.rmi.Remote
+
 /*****************************************************************************************************************
  *  Copyright Alasdair Thin
  *
@@ -49,42 +51,217 @@ preferences {
 
 def mainPage() {
     dynamicPage(name: 'mainPage', uninstall: true, install: true) {
-        section('Logging settings') {
-            input(name: 'logLevelIDE', title: 'IDE Logging Level', type: 'enum', options: [0: 'None', 1: 'Error', 2: 'Warning', 3: 'Info', 4: 'Debug', 5: 'Trace'], defaultValue: 3, displayDuringSetup: true, required: false)
+        section('Logger Settings') {
+            input(
+                    name: 'logLevelIDE',
+                    title: 'IDE Logging Level',
+                    description: '',
+                    type: 'enum',
+                    options: [0: 'None', 1: 'Error', 2: 'Warning', 3: 'Info', 4: 'Debug', 5: 'Trace'],
+                    defaultValue: 3,
+                    displayDuringSetup: true,
+                    required: false
+            )
 
-            input(name: 'logLevelDB', title: 'Database Logging Level', type: 'enum', options: [1: 'Minimal', 2: 'Intermediate', 3: 'All'], defaultValue: 1, displayDuringSetup: true, required: false)
+            input(
+                    name: 'logLevelDB',
+                    title: 'Database Logging Level',
+                    description: '',
+                    type: 'enum',
+                    options: [1: 'Minimal', 2: 'Intermediate', 3: 'All'],
+                    defaultValue: 1,
+                    displayDuringSetup: true,
+                    required: false
+            )
 
-            input(name: 'paraLoggingDB', title: 'Measurements to Log', type: 'paragraph', description: '', element: 'paragraph', required: false)
+            input(
+                    name: 'paraLoggingDB',
+                    title: 'Measurements to Log',
+                    description: '',
+                    type: 'paragraph',
+                    element: 'paragraph', // TODO - check this is required
+                    required: false
+            )
 
-            input(name: 'logEvents', title: 'Events', description: '', type: 'bool', defaultValue: false, required: false)
+            input(
+                    name: 'logEvents',
+                    title: 'Events',
+                    description: '',
+                    type: 'bool',
+                    defaultValue: false,
+                    required: false
+            )
 
-            input(name: 'logMetadata', title: 'Metadata', description: '', type: 'bool', defaultValue: false, required: false)
+            input(
+                    name: 'logMetadata',
+                    title: 'Metadata',
+                    description: '',
+                    type: 'bool',
+                    defaultValue: false,
+                    required: false
+            )
 
-            input(name: 'logStatuses', title: 'Statuses', description: '', type: 'bool', defaultValue: false, required: false)
+            input(
+                    name: 'logStatuses',
+                    title: 'Statuses',
+                    description: '',
+                    type: 'bool',
+                    defaultValue: false,
+                    required: false
+            )
 
-            input(name: 'logConfigs', title: 'Configurations', description: '', type: 'bool', defaultValue: false, required: false)
+            input(
+                    name: 'logConfigs',
+                    title: 'Configurations',
+                    description: '',
+                    type: 'bool',
+                    defaultValue: false,
+                    required: false
+            )
         }
 
-        section('Influx Database settings') {
-            input(name: 'dbVersion', type: 'number', title: 'Database version', range: '1..2', defaultValue: 2, required: false)
+        section('Influx Database Versions') {
+            input(
+                    name         : 'dbVersion1',
+                    title        : 'Log to InfluxDB Version One',
+                    description  : '',
+                    type         : 'bool',
+                    defaultValue : false,
+                    required     : false
+            )
 
-            input(name: 'dbRemote', type: 'bool', title: 'Remote Database', defaultValue: true, required: false)
+            input(
+                    name         : 'dbVersion2',
+                    title        : 'Log to InfluxDB Version Two',
+                    description  : '',
+                    type         : 'bool',
+                    defaultValue : false,
+                    required     : false
+            )
+        }
 
-            input(name: 'dbSSL', type: 'bool', title: 'Encrypted Connection', defaultValue: true, required: false)
+        section(hideable: true, hidden: true, 'Influx Database Version 1 Settings') {
+            input(
+                    name         : 'dbRemote1',
+                    title        : 'Remote Database',
+                    description  : '',
+                    type         : 'bool',
+                    defaultValue : true,
+                    required     : false
+            )
 
-            input(name: 'dbHost', type: 'text', title: 'Host', capitalization: 'none', autoCorrect: false, required: true)
+            input(
+                    name         : 'dbSSL1',
+                    title        : 'Encrypted Connection',
+                    description  : '',
+                    type         : 'bool',
+                    defaultValue : true,
+                    required     : false
+            )
 
-            input(name: 'dbPort', type: 'number', title: 'Port', defaultValue: '443', required: false)
+            input(
+                    name           : 'dbHost1',
+                    title          : 'Host',
+                    description    : '',
+                    type           : 'text',
+                    capitalization : 'none',
+                    autoCorrect    : false,
+                    required       : true
+            )
 
-            input(name: 'dbName', type: 'text', title: 'Database (v1)', capitalization: 'none', autoCorrect: false, required: false)
+            input(
+                    name         : 'dbPort1',
+                    title        : 'Port',
+                    description  : '',
+                    type         : 'number',
+                    defaultValue : '443',
+                    required     : false
+            )
 
-            input(name: 'dbUsername', type: 'text', title: 'Username (v1)', capitalization: 'none', autoCorrect: false, required: false)
+            input(
+                    name           : 'dbName1',
+                    title          : 'Database',
+                    description    : '',
+                    type           : 'text',
+                    capitalization : 'none',
+                    autoCorrect    : false,
+                    required       : false
+            )
 
-            input(name: 'dbPassword', type: 'password', title: 'Password (v1)', required: false)
+            input(
+                    name           : 'dbUsername1',
+                    title          : 'Username',
+                    description    : '',
+                    type           : 'text',
+                    capitalization : 'none',
+                    autoCorrect    : false,
+                    required       : false
+            )
 
-            input(name: 'dbOrganization', type: 'text', title: 'Organization (v2)', capitalization: 'none', autoCorrect: false, required: false)
+            input(
+                    name           : 'dbPassword1',
+                    title          : 'Password',
+                    description    : '',
+                    type           : 'password',
+                    required       : false
+            )
+        }
 
-            input(name: 'dbToken', type: 'password', title: 'Authorisation Token (v2)', required: false)
+        section(hideable: true, hidden: true, 'Influx Database Version 2 Settings') {
+            input(
+                    name           : 'dbRemote2',
+                    title          : 'Remote Database',
+                    description    : '',
+                    type           : 'bool',
+                    defaultValue   : true,
+                    required       : false
+            )
+
+            input(
+                    name           : 'dbSSL2',
+                    title          : 'Encrypted Connection',
+                    description    : '',
+                    type           : 'bool',
+                    defaultValue   : true,
+                    required       : false
+            )
+
+            input(
+                    name           : 'dbHost2',
+                    title          : 'Host',
+                    description    : '',
+                    type           : 'text',
+                    capitalization : 'none',
+                    autoCorrect    : false,
+                    required       : true
+            )
+
+            input(
+                    name           : 'dbPort2',
+                    title          : 'Port',
+                    description    : '',
+                    type           : 'number',
+                    defaultValue   : '443',
+                    required       : false
+            )
+
+            input(
+                    name           : 'dbOrganization2',
+                    title          : 'Organization',
+                    description    : '',
+                    type           : 'text',
+                    capitalization : 'none',
+                    autoCorrect    : false,
+                    required       : false
+            )
+
+            input(
+                    name           : 'dbToken2',
+                    title          : 'Authorisation Token',
+                    description    : '',
+                    type           : 'password',
+                    required       : false
+            )
         }
 
         if (state.devicesConfigured) {
@@ -185,7 +362,7 @@ def updated() { // runs when app settings are changed
     state.logLevelDB = (settings.logLevelDB) ? settings.logLevelDB.toInteger() : 1
 
     /**
-     * if all database logging options are off, then influx line protcol will still be assembled, but only shown in IDE
+     * if all database logging options are off, then influx line protocol will still be assembled, but only shown in IDE
      */
     if (!settings.logEvents && !settings.logMetadata && !settings.logStatuses && !settings.logConfigs) {
         state.logToDB     = false
@@ -203,19 +380,27 @@ def updated() { // runs when app settings are changed
     }
 
     /**
-     * create uri depending on database (Local | Remote) and whether using SSL
+     * Sets database location(s) and uri(s)
      */
-    if (settings.dbRemote) {
-        state.uri = "http${(settings?.dbSSL) ? 's' : ''}://${settings?.dbHost}:${settings?.dbPort}"
-    }
-    else {
-        state.uri = "${settings?.dbHost}:${settings?.dbPort}"
-    }
+    state.influxDBVersions = [1, 2]
+    state.influxDBVersionsLocations = []
+    state.influxDBVersions.each {
+        if (settings?."dbVersion${it}") {
+            def host = settings?."dbHost${it}"
+            def port = settings?."dbPort${it}"
 
-    /**
-     * sets parameter for determining which post method to call
-     */
-    state.dbLocation = (settings?.dbRemote) ? 'Remote' : 'Local'
+            if (settings?."dbRemote${it}") {
+                state."dbLocation${it}" = 'Remote'
+                def secure = (settings?."dbSSL${it}") ? 's' : ''
+                state."dbUri${it}" = "http${secure}://${host}:${port}"
+            }
+            else {
+                state."dbLocation${it}" = 'Local'
+                state."dbUri${it}" = "${host}:${port}"
+            }
+            state.influxDBVersionsLocations << ("v${it}" + state."dbLocation${it}")
+        }
+    }
 
     logger('updated: Creating map of group Ids and group names', 'debug')
     state.dwellingType = 'House'
@@ -547,11 +732,19 @@ def influxLineProtocol(items, measurementName, measurementType, bucket = 'events
         logger("handleEnumEvent(): Ignoring duplicate event $evt.displayName ($evt.name) $evt.value", 'warn')
     }
 */
+    def data = influxLP.toString()
     if (state.logToDB) {
-        "postToInfluxDB${state.dbLocation}"(influxLP.toString(), retentionPolicy, bucket, eventId)
+        state.influxDBVersionsLocations.each {
+            switch (it) {
+                case 'v1Local'  : "postToInfluxDB${it}"(data, retentionPolicy)
+                case 'v1Remote' : "postToInfluxDB${it}"(data, retentionPolicy, eventId)
+                case 'v2Local'  : "postToInfluxDB${it}"(data, bucket)
+                case 'v2Remote' : "postToInfluxDB${it}"(data, bucket, eventId)
+            }
+        }
     }
     else {
-        logger("influxLineProtocol: ${influxLP.toString()}", 'debug')
+        logger("influxLineProtocol: ${data}", 'debug')
     }
 }
 
@@ -1060,45 +1253,77 @@ def getBatteryChangeDate() { return {
 /*****************************************************************************************************************
  *  Main Commands:
  *****************************************************************************************************************/
-def postToInfluxDBLocal(data, retentionPolicy, bucket, eventId) {
+def postToInfluxDBv1Local(data, retentionPolicy) {
     def headers = [
-            HOST           : state.uri,
+            HOST           : state.dbUri1,
             'Content-Type' : 'application/octet-stream',
             'Accept'       : 'application/json'
     ]
 
-    def query = [precision : 'ms']
-
-    def params = [
-            method   : 'POST',
-            headers  : headers,
-            query    : query,
-            body     : data
+    def query = [
+            precision : 'ms'
     ]
 
-    switch(settings.dbVersion) {
-        case 1:
-            query << [
-                    db : settings?.dbName,
-                    u  : settings?.dbUsername,
-                    p  : settings?.dbPassword,
-                    rp : retentionPolicy
-            ]
+    def params = [
+            method  : 'POST',
+            headers : headers,
+            query   : query,
+            body    : data
+    ]
 
-            params << [path : '/write']
-            break
+    def options = [
+            callback : handleInfluxDBResponseLocal
+    ]
 
-        default:
-            headers << [authorization : "Token ${settings?.dbToken}"]
-            query   << [org : settings?.dbOrganization, bucket : bucket]
-            params  << [path : '/api/v2/write']
-            break
-    }
+    query << [
+            db : settings?.dbName1,
+            u  : settings?.dbUsername1,
+            p  : settings?.dbPassword1,
+            rp : retentionPolicy
+    ]
 
-    def options = [callback : handleInfluxDBResponseLocal]
+    params << [
+            path : '/write'
+    ]
 
-    logger("postToInfluxDBhubAction: Posting data to InfluxDB: Host: ${state.uri}${params.path} Data: ${data}", 'info')
-    // logger("postToInfluxDBhubAction: Posting data to InfluxDB: Headers: ${headers}, Host: ${state.uri}${params.path}, Query: ${query}, Data: ${data}", 'info')
+    logger("postToInfluxDBhubAction: Posting data to InfluxDB v1: Host: ${state.dbUri1}${params.path} Data: ${data}", 'info')
+    sendHubCommand(new physicalgraph.device.HubAction(params, null, options))
+}
+
+def postToInfluxDBv2Local(data, bucket) {
+    def headers = [
+            HOST           : state.dbUri2,
+            'Content-Type' : 'application/octet-stream',
+            'Accept'       : 'application/json'
+    ]
+
+    def query = [
+            precision : 'ms'
+    ]
+
+    def params = [
+            method  : 'POST',
+            headers : headers,
+            query   : query,
+            body    : data
+    ]
+
+    def options = [
+            callback : handleInfluxDBResponseLocal
+    ]
+
+    headers << [
+            authorization : "Token ${settings?.dbToken2}"
+    ]
+    query   << [
+            org    : settings?.dbOrganization2,
+            bucket : bucket
+    ]
+    params  << [
+            path : '/api/v2/write'
+    ]
+
+    logger("postToInfluxDBhubAction: Posting data to InfluxDB v2: Host: ${state.dbUri2}${params.path} Data: ${data}", 'info')
     sendHubCommand(new physicalgraph.device.HubAction(params, null, options))
 }
 
@@ -1107,40 +1332,65 @@ def handleInfluxDBResponseLocal(physicalgraph.device.HubResponse hubResponse) {
     if (hubResponse.status >= 400) logger("postToInfluxDBLocal: Something went wrong! Code: ${hubResponse.status} Message: ${hubResponse.json.error}", 'error')
 }
 
-def postToInfluxDBRemote(data, retentionPolicy, bucket, eventId) {
-    def query = [precision : 'ms']
+def postToInfluxDBv1Remote(data, retentionPolicy, eventId) {
+    def query = [
+            precision : 'ms'
+    ]
 
     def params = [
-            uri                : state.uri,
+            uri                : state.dbUri1,
             query              : query,
             requestContentType : 'application/octet-stream',  // 'Content-Type'
             contentType        : 'application/json', // 'Accept'
             body               : data
     ]
 
-    switch(settings?.dbVersion) {
-        case 1:
-            query << [
-                    db : settings?.dbName,
-                    u  : settings?.dbUsername,
-                    p  : settings?.dbPassword,
-                    rp : retentionPolicy
-            ]
+    def passData = [eventId : eventId]
 
-            params << [path : '/write']
-            break
+    query << [
+            db : settings?.dbName1,
+            u  : settings?.dbUsername1,
+            p  : settings?.dbPassword1,
+            rp : retentionPolicy
+    ]
 
-        default:
-            params << [headers : [authorization : "Token ${settings?.dbToken}"]]
-            query  << [org : settings?.dbOrganization, bucket : bucket]
-            params << [path : '/api/v2/write']
-            break
-    }
+    params << [
+            path : '/write'
+    ]
+
+    logger("postToInfluxDBasynchttp: Posting data to InfluxDB v1: Host: ${state.dbUri1}${params.path} Data: ${data}", 'info')
+    asynchttp_v1.post(handleInfluxDBResponseRemote, params, passData)
+}
+
+def postToInfluxDBv2Remote(data, bucket, eventId) {
+    def query = [
+            precision : 'ms'
+    ]
+
+    def params = [
+            uri                : state.dbUri2,
+            query              : query,
+            requestContentType : 'application/octet-stream',  // 'Content-Type'
+            contentType        : 'application/json', // 'Accept'
+            body               : data
+    ]
 
     def passData = [eventId : eventId]
 
-    logger("postToInfluxDBasynchttp: Posting data to InfluxDB: Host: ${state.uri}${params.path} Data: ${data}", 'info')
-    // logger("postToInfluxDBasynchttp: Posting data to InfluxDB: Host: ${state.uri}${params.path}, Query: ${query}, Data: ${data}", 'info')
+    params << [
+            headers : [authorization : "Token ${settings?.dbToken2}"]
+    ]
+
+    query  << [
+            org    : settings?.dbOrganization2,
+            bucket : bucket
+    ]
+
+    params << [
+            path : '/api/v2/write'
+    ]
+
+    logger("postToInfluxDBasynchttp: Posting data to InfluxDB v2: Host: ${state.dbUri2}${params.path} Data: ${data}", 'info')
     asynchttp_v1.post(handleInfluxDBResponseRemote, params, passData)
 }
 
@@ -1153,7 +1403,7 @@ def handleInfluxDBResponseRemote(response, passData) {
  *  Private Helper Functions:
  *****************************************************************************************************************/
 private manageSchedules() {
-    logger('manageSchedules: Schedulling polling methods', 'trace')
+    logger('manageSchedules: Scheduling polling methods', 'trace')
     pollingMethods().each {
         try {
             unschedule(it.key)
@@ -1264,7 +1514,7 @@ private getSupportedAttributes() {
 }
 
 /**
- * iterates through Capabilites map and creates a list of all the potential attributes (so no custom attributes - could look at pulling them from device.supportedAttributes)
+ * iterates through Capabilities map and creates a list of all the potential attributes (so no custom attributes - could look at pulling them from device.supportedAttributes)
  * @return
  */
 private getAllAttributes() {
